@@ -43,10 +43,6 @@
         state: latest
         update_cache: true
 
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-
     - name: Log into private registry and force re-authorization
       community.docker.docker_login:
         registry_url: registry.git.step.polymtl.ca/log8100/equipe11
@@ -79,14 +75,24 @@
         dest: /usr/local/bin/minikube
         mode: '0755'
 
-    # =========================
-    # 4. Add user to docker group
-    # =========================
-    - name: Add ubuntu user to docker group
-      user:
-        name: "{{ kube_user }}"
-        groups: docker
-        append: yes
+    # # =========================
+    # # 4. Add user to docker group
+    # # =========================
+    # - name: Add ubuntu user to docker group
+    #   user:
+    #     name: "{{ kube_user }}"
+    #     groups: docker
+    #     append: yes
+
+    - name: Create Kubernetes imagePullSecret for private registry
+      become: false
+      command: >
+        kubectl create secret generic regcred \
+        --from-file=.dockerconfigjson=/home/{{ kube_user }}/.docker/config.json \
+        --type=kubernetes.io/dockerconfigjson
+
+      register: regcred_result
+      failed_when: false    
 
     # =========================
     # 5. Start Minikube
