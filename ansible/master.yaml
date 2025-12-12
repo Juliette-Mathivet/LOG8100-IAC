@@ -57,23 +57,31 @@
     #     name: "{{ default_container_image }}"
     #     source: pull
     
-    # =========================
-    # 2. Install kubectl
-    # =========================
-    - name: Download kubectl
-      get_url:
-        url: https://storage.googleapis.com/kubernetes-release/release/stable/bin/linux/amd64/kubectl
-        dest: /usr/local/bin/kubectl
-        mode: '0755'
-
-    # =========================
-    # 3. Install Minikube
-    # =========================
     - name: Download Minikube binary
       get_url:
-        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        dest: /usr/local/bin/minikube
+        url: "https://storage.googleapis.com/minikube/releases/v1.34.0/minikube-linux-amd64"
+        dest: "/usr/local/bin/minikube"
         mode: '0755'
+
+    - name: Verify Minikube installation
+      command: "minikube version"
+      register: minikube_version
+      changed_when: false
+
+    - name: Get the latest stable Kubernetes version
+      command: "curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+      register: kubectl_version
+
+    - name: Install kubectl
+      get_url:
+        url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version.stdout }}/bin/linux/amd64/kubectl"
+        dest: "/usr/local/bin/kubectl"
+        mode: '0755'
+
+    - name: Verify kubectl installation
+      command: "kubectl version --client"
+      register: kubectl_version_output
+      changed_when: false
 
     # # =========================
     # # 4. Add user to docker group
