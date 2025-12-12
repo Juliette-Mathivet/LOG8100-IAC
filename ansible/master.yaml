@@ -43,6 +43,18 @@
         state: latest
         update_cache: true
 
+
+    - name: Ensure group "docker" exists
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: adding ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
     - name: Log into private registry and force re-authorization
       community.docker.docker_login:
         registry_url: registry.git.step.polymtl.ca/log8100/equipe11
@@ -133,9 +145,9 @@
       register: expose_result
       failed_when: false
 
-    - name: Start Minikube with 2 nodes and RBAC enabled
+    - name: Start Minikube
       become: false
-      command: "sudo minikube start --nodes 2 --driver=docker --memory=6500 --cpus=2 --force"
+      command: "sudo minikube start --driver=docker --memory=6500 --cpus=2 --force"
 
     - name: Wait for Minikube to be ready
       command: "minikube status"
