@@ -113,10 +113,6 @@
         group: "{{ kube_user }}"
         mode: '0755'
 
-    - name: Set kubectl context to minikube
-      become: false
-      command: kubectl config use-context minikube
-
     # =========================
     # 7. Apply Kubernetes deployment
     # =========================
