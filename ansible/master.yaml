@@ -102,16 +102,15 @@
       register: regcred_result
       failed_when: false    
 
-    # =========================
-    # 5. Start Minikube
-    # =========================
-    - name: Start Minikube cluster (Docker driver)
-      become: false
-      command: minikube start --driver=docker
-      environment:
-        CHANGE_MINIKUBE_NONE_USER: "true"
-      args:
-        creates: /home/{{ kube_user }}/.minikube
+    - name: Start Minikube with 2 nodes and RBAC enabled
+      command: "sudo minikube start --nodes 2 --driver=docker --memory=8192 --cpus=4 --force"
+
+    - name: Wait for Minikube to be ready
+      command: "minikube status"
+      register: minikube_status
+      until: "'host' in minikube_status.stdout"
+      retries: 5
+      delay: 10
 
     # =========================
     # 6. Configure kubectl
