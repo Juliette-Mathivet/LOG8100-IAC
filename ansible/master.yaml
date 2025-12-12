@@ -1,6 +1,11 @@
 - hosts: localhost
   connection: local
   become: yes
+
+  vars:
+    kube_user: ubuntu
+    deployment_file: "../kubernetes/webgoat-deployment.yaml"
+
   tasks:
     - name: Install aptitude
       apt:
@@ -18,6 +23,7 @@
           - python3-pip
           - virtualenv
           - python3-setuptools
+          - conntrack
         state: latest
         update_cache: true
 
@@ -40,9 +46,102 @@
     - name: Install Docker Module for Python
       pip:
         name: docker
+
+    - name: Log into private registry and force re-authorization
+      community.docker.docker_login:
+        registry_url: registry.git.step.polymtl.ca/log8100/equipe11
+        username: juliette-mathivet
+        password: STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu
+        reauthorize: true
+
+    
     
     # - name: Pull default Docker image
     #   community.docker.docker_image:
     #     name: "{{ default_container_image }}"
     #     source: pull
     
+    # =========================
+    # 2. Install kubectl
+    # =========================
+    - name: Download kubectl
+      get_url:
+        url: https://storage.googleapis.com/kubernetes-release/release/stable/bin/linux/amd64/kubectl
+        dest: /usr/local/bin/kubectl
+        mode: '0755'
+
+    # =========================
+    # 3. Install Minikube
+    # =========================
+    - name: Download Minikube binary
+      get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        dest: /usr/local/bin/minikube
+        mode: '0755'
+
+    # =========================
+    # 4. Add user to docker group
+    # =========================
+    - name: Add ubuntu user to docker group
+      user:
+        name: "{{ kube_user }}"
+        groups: docker
+        append: yes
+
+    # =========================
+    # 5. Start Minikube
+    # =========================
+    - name: Start Minikube cluster (Docker driver)
+      become: false
+      command: minikube start --driver=docker
+      environment:
+        CHANGE_MINIKUBE_NONE_USER: "true"
+      args:
+        creates: /home/{{ kube_user }}/.minikube
+
+    # =========================
+    # 6. Configure kubectl
+    # =========================
+    - name: Ensure .kube directory exists
+      file:
+        path: /home/{{ kube_user }}/.kube
+        state: directory
+        owner: "{{ kube_user }}"
+        group: "{{ kube_user }}"
+        mode: '0755'
+
+    - name: Set kubectl context to minikube
+      become: false
+      command: kubectl config use-context minikube
+
+    # =========================
+    # 7. Apply Kubernetes deployment
+    # =========================
+    - name: Apply WebGoat deployment
+      become: false
+      command: kubectl apply -f {{ deployment_file }}
+
+    # =========================
+    # 8. Expose WebGoat service
+    # =========================
+    - name: Expose WebGoat service
+      become: false
+      command: >
+        kubectl expose deployment webgoat-deployment
+        --type=NodePort
+        --port=80
+        --target-port=8080
+      register: expose_result
+      failed_when: false
+
+    # =========================
+    # 9. Get service URL
+    # =========================
+    - name: Get Minikube service URL
+      become: false
+      command: minikube service webgoat-deployment --url
+      register: service_url
+
+    - name: Display WebGoat URL
+      debug:
+        msg: "WebGoat is accessible at {{ service_url.stdout }}"
