@@ -31,11 +31,17 @@ docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest;
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl";
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl;
 
-set -e
+
 #microk8s
-if ! snap list | grep -q "^microk8s " || true; then
-  sudo snap install microk8s --classic --channel=1.25/stable
+if dpkg -s "microk8s" &> /dev/null; then
+    echo "Package microk8s is installed."
+else
+    echo "Package microk8s is NOT installed."
+    sudo snap install microk8s --classic --channel=1.25/stable
+    # Optional: Add installation command here
+    # sudo apt-get install -y "$PACKAGE_NAME"
 fi
+
 
 sudo usermod -a -G microk8s ubuntu;
 sudo chown -f -R ubuntu ~/.kube;
