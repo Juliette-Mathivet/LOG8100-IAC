@@ -43,9 +43,10 @@ else
 fi
 
 echo "if is done";
-sudo usermod -a -G microk8s ubuntu;
-sudo chown -f -R ubuntu ~/.kube;
-newgrp microk8s;
+sudo usermod -a -G microk8s ubuntu
+sudo chown -f -R ubuntu ~/.kube
+newgrp microk8s
+echo "grp mgmt done";
 
 microk8s enable dns;
 microk8s enable dashboard;
