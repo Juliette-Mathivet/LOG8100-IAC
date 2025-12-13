@@ -120,7 +120,7 @@
 
     - name: Start Minikube
       become: false
-      command: "sudo minikube start --driver=docker --memory=6500 --cpus=2 --force"
+      command: "minikube start --driver=docker --memory=6500 --cpus=2 --force"
 
     - name: Wait for Minikube to be ready
       command: "minikube status"
