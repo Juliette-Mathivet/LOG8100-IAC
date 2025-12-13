@@ -163,6 +163,7 @@
         kubectl expose deployment webgoat-deployment
         --type=NodePort
         --port=80
+        --name=webgoat
         --target-port=8080
       register: expose_result
       failed_when: false
