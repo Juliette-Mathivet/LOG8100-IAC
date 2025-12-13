@@ -54,5 +54,7 @@ kubectl apply -f webgoat-deployment.yaml
 
 kubectl expose deployment webgoat-deployment --type=NodePort --name=webgoat --port=8080
 
+sleep 20
+
 minikube service webgoat
 
