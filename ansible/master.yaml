@@ -173,7 +173,7 @@
     # =========================
     - name: Get Minikube service URL
       become: false
-      command: minikube service webgoat-deployment --url
+      command: minikube service webgoat --url
       register: service_url
 
     - name: Display WebGoat URL
