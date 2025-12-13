@@ -67,11 +67,14 @@
         password: STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu
         reauthorize: true
 
-    - name: pull image
-      become: false
-      command: >
-        docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
+    # - name: pull image
+    #   become: false
+    #   command: >
+    #     docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
 
+    - name: Pull an image
+      community.docker.docker_image_pull:
+        name: registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
     
     # - name: Pull default Docker image
     #   community.docker.docker_image:
