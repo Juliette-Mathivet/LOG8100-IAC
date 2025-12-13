@@ -33,7 +33,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl;
 
 
 #microk8s
-if dpkg -s "microk8s" &> /dev/null; then
+if snap list microk8s >/dev/null 2>&1; then
     echo "Package microk8s is installed."
 else
     echo "Package microk8s is NOT installed."
