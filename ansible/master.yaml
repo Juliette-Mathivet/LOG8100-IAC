@@ -111,8 +111,8 @@
     - name: Create Kubernetes imagePullSecret for private registry
       become: false
       command: >
-        kubectl create secret generic regcred \
-        --from-file=.dockerconfigjson=/home/{{ kube_user }}/.docker/config.json \
+        kubectl create secret generic regcred 
+        --from-file=.dockerconfigjson=/home/{{ kube_user }}/.docker/config.json 
         --type=kubernetes.io/dockerconfigjson
 
       register: regcred_result
