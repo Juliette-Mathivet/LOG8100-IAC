@@ -6,8 +6,6 @@ sudo install -m 0755 -d /etc/apt/keyrings;
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc;
 sudo chmod a+r /etc/apt/keyrings/docker.asc;
 
-# sudo tee /etc/apt/sources.list.d/docker.sources <<EOF Types: deb URIs: https://download.docker.com/linux/ubuntu Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") Components: stable Signed-By: /etc/apt/keyrings/docker.asc EOF
-
 sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
 Types: deb
 URIs: https://download.docker.com/linux/ubuntu
@@ -19,10 +17,8 @@ EOF
 sudo apt update;
 
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin;
-# sudo systemctl status docker
 sudo groupadd docker;
 sudo usermod -aG docker $USER;
-# newgrp docker
 echo $DOCKER_LOGIN_TOKEN | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca;
 
 docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest;
@@ -38,28 +34,13 @@ if snap list microk8s >/dev/null 2>&1; then
 else
     echo "Package microk8s is NOT installed."
     sudo snap install microk8s --classic --channel=1.25/stable
-    # Optional: Add installation command here
-    # sudo apt-get install -y "$PACKAGE_NAME"
 fi
 
-# sudo usermod -a -G microk8s ubuntu
-# sudo chown -f -R ubuntu ~/.kube
-# newgrp microk8s
-
 sudo microk8s enable dns;
-sudo microk8s enable dashboard;
 sudo microk8s enable storage;
 sudo microk8s enable ingress;
 
-
-
 cd ../kubernetes;
-
-# kubectl create secret docker-registry regcred 
-#         --docker-server=registry.git.step.polymtl.ca
-#         --docker-username=juliette-mathivet
-#         --docker-password=STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk
-#         --docker-email=juliette.mathivet@etud.polymtl.ca
 
 sudo microk8s kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=/home/ubuntu/.docker/config.json \
@@ -67,7 +48,6 @@ sudo microk8s kubectl create secret generic regcred \
 
 sudo microk8s kubectl apply -f webgoat-deployment.yaml;
 sudo microk8s kubectl apply -f webgoat-service.yaml;
-# sudo microk8s kubectl apply -f default-ingressclass.yaml;
 sudo microk8s kubectl apply -f webgoat-ingress.yaml;
 echo "Please give a few minutes for the ingress to setup";
 
