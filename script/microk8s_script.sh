@@ -67,6 +67,6 @@ sudo microk8s kubectl create secret generic regcred \
 sudo microk8s kubectl apply -f webgoat-deployment.yaml;
 
 sudo microk8s kubectl expose deployment webgoat-deployment --type=NodePort --name=webgoat --port=8080;
-sudo microk8s kubectl port-forward service/webgoat 8080:80;
+sudo microk8s kubectl port-forward service/webgoat 80:8080;
 
 
