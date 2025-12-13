@@ -42,7 +42,7 @@ else
     # sudo apt-get install -y "$PACKAGE_NAME"
 fi
 
-
+echo "if is done";
 sudo usermod -a -G microk8s ubuntu;
 sudo chown -f -R ubuntu ~/.kube;
 newgrp microk8s;
