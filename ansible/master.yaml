@@ -59,18 +59,23 @@
       ansible.builtin.meta:
         reset_connection
 
-    - name: Log into private registry and force re-authorization
-      become: false
-      community.docker.docker_login:
-        registry_url: registry.git.step.polymtl.ca/log8100/equipe11
-        username: juliette-mathivet
-        password: STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu
-        reauthorize: true
-
-    # - name: pull image
+    # - name: Log into private registry and force re-authorization
     #   become: false
-    #   command: >
-    #     docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
+    #   community.docker.docker_login:
+    #     registry_url: registry.git.step.polymtl.ca/log8100/equipe11
+    #     username: juliette-mathivet
+    #     password: STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu
+    #     reauthorize: true
+
+    - name: docker login
+      become: false
+      command: >
+        echo "STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
+
+    - name: pull image
+      become: false
+      command: >
+        docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
 
     - name: Pull an image
       community.docker.docker_image_pull:
