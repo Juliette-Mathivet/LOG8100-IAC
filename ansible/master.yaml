@@ -50,7 +50,10 @@
         state: present
 
     - name: adding ubuntu to docker group
-      command: "sudo usermod -aG docker $USER && newgrp docker"
+      command: >
+        sudo groupadd docker
+        sudo usermod -aG docker $USER
+        newgrp docker
 
     - name: Log into private registry and force re-authorization
       community.docker.docker_login:
