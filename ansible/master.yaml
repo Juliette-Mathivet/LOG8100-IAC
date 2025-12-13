@@ -154,10 +154,10 @@
       command: >
         kubectl create secret docker-registry regcred 
         --docker-server=registry.git.step.polymtl.ca
-        --docker-username="{{ juliette-mathivet }}"
-        --docker-password="{{ STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk }}"
-        --docker-email="juliette.mathivet@etud.polymtl.ca"
-        --dry-run=client -o yaml | kubectl apply -f -
+        --docker-username=juliette-mathivet
+        --docker-password=STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk
+        --docker-email=juliette.mathivet@etud.polymtl.ca
+      # --dry-run=client -o yaml | kubectl apply -f -
 
     # =========================
     # 7. Apply Kubernetes deployment
