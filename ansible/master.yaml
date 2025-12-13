@@ -114,7 +114,19 @@
         --type=kubernetes.io/dockerconfigjson
 
       register: regcred_result
-      failed_when: false    
+      failed_when: false
+
+    - name: Start Minikube
+      become: false
+      command: "sudo minikube start --driver=docker --memory=6500 --cpus=2 --force"
+
+    - name: Wait for Minikube to be ready
+      command: "minikube status"
+      register: minikube_status
+      until: "'host' in minikube_status.stdout"
+      retries: 5
+      delay: 10
+    
 
     # =========================
     # 6. Configure kubectl
@@ -146,18 +158,6 @@
         --target-port=8080
       register: expose_result
       failed_when: false
-
-    - name: Start Minikube
-      become: false
-      command: "sudo minikube start --driver=docker --memory=6500 --cpus=2 --force"
-
-    - name: Wait for Minikube to be ready
-      command: "minikube status"
-      register: minikube_status
-      until: "'host' in minikube_status.stdout"
-      retries: 5
-      delay: 10
-
 
     # =========================
     # 9. Get service URL
