@@ -23,7 +23,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo groupadd docker
 sudo usermod -aG docker $USER
 # newgrp docker
-echo STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca
+echo STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca
 
 docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
 
