@@ -67,7 +67,7 @@ sudo microk8s kubectl create secret generic regcred \
 
 sudo microk8s kubectl apply -f webgoat-deployment.yaml;
 sudo microk8s kubectl apply -f webgoat-service.yaml;
-sudo microk8s kubectl apply -f default-ingress.yaml;
+sudo microk8s kubectl apply -f default-ingressclass.yaml;
 sudo microk8s kubectl apply -f webgoat-ingress.yaml;
 
 
