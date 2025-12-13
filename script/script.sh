@@ -57,4 +57,6 @@ kubectl expose deployment webgoat-deployment --type=NodePort --name=webgoat --po
 sleep 20
 
 minikube service webgoat
+sudo minikube tunnel
+
 
