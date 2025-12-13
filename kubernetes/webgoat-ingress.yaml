@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: webgoat-ingress
 spec:
+  ingressClassName: public
   defaultBackend:
     service:
       name: webgoat-service
