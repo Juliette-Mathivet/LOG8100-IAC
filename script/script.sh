@@ -36,7 +36,7 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-a
 #start minikube sudo?
 minikube start --driver=docker --memory=6500 --cpus=2 --force
 
-cd LOG8100-IAC/kubernetes
+cd ../kubernetes
 
 # kubectl create secret docker-registry regcred 
 #         --docker-server=registry.git.step.polymtl.ca
