@@ -25,6 +25,8 @@ sudo usermod -aG docker $USER
 # newgrp docker
 echo STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca
 
+docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
+
 #kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
