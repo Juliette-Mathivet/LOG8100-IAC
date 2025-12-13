@@ -53,9 +53,11 @@
       user:
         name: ubuntu
         groups: docker
-        append: yes
+        append: true
 
-
+    - name: Reset ssh connection to allow user changes to affect ansible user
+      ansible.builtin.meta:
+        reset_connection
 
     - name: Log into private registry and force re-authorization
       community.docker.docker_login:
@@ -124,8 +126,9 @@
       command: "minikube status"
       register: minikube_status
       until: "'host' in minikube_status.stdout"
-      retries: 5
+      retries: 10
       delay: 10
+      until: minikube_status.stdout == "Running"
     
 
     # =========================
