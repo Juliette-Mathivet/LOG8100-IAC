@@ -69,5 +69,6 @@ sudo microk8s kubectl apply -f webgoat-deployment.yaml;
 sudo microk8s kubectl apply -f webgoat-service.yaml;
 # sudo microk8s kubectl apply -f default-ingressclass.yaml;
 sudo microk8s kubectl apply -f webgoat-ingress.yaml;
+echo "Please give a few minutes for the ingress to setup";
 
 
