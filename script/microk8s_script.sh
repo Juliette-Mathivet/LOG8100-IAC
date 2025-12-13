@@ -32,7 +32,7 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl;
 
 #microk8s
-sudo snap install -y microk8s --classic --channel=1.25/stable;
+sudo snap install microk8s --classic --channel=1.25/stable;
 sudo usermod -a -G microk8s ubuntu;
 sudo chown -f -R ubuntu ~/.kube;
 newgrp microk8s;
