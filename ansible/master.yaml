@@ -70,7 +70,7 @@
     - name: docker login
       become: false
       command: >
-        echo "STEP-kHq1EYy054WWoEgWTlcEvG86MQp1Om94CA.01.0y1v9dinq" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
+        echo "STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
 
 
     - name: pull image
