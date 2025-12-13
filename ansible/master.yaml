@@ -128,7 +128,7 @@
       until: "'host' in minikube_status.stdout"
       retries: 10
       delay: 10
-      until: minikube_status.stdout == "Running"
+      # until: minikube_status.stdout == "Running"
     
 
     # =========================
