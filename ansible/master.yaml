@@ -60,28 +60,29 @@
         reset_connection
 
     # - name: Log into private registry and force re-authorization
-    #   become: false
+    #   become: true
     #   community.docker.docker_login:
-    #     registry_url: registry.git.step.polymtl.ca/log8100/equipe11
+    #     registry_url: registry.git.step.polymtl.ca
     #     username: juliette-mathivet
-    #     password: STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu
+    #     password: STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk
     #     reauthorize: true
 
-    - name: docker login
-      become: false
-      command: >
-        echo "STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
-
-
-    - name: pull image
-      become: false
-      command: >
-        docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
-
     # - name: Pull an image
+    #   become: true
     #   community.docker.docker_image_pull:
     #     name: registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
     
+    # - name: docker login
+    #   become: false
+    #   command: >
+    #     echo "STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
+
+
+    # - name: pull image
+    #   become: false
+    #   command: >
+    #     docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
+
     # - name: Pull default Docker image
     #   community.docker.docker_image:
     #     name: "{{ default_container_image }}"
@@ -112,6 +113,8 @@
       command: "kubectl version --client"
       register: kubectl_version_output
       changed_when: false
+      register: regcred_result
+      failed_when: false
 
     # # =========================
     # # 4. Add user to docker group
@@ -121,16 +124,6 @@
     #     name: "{{ kube_user }}"
     #     groups: docker
     #     append: yes
-
-    - name: Create Kubernetes imagePullSecret for private registry
-      become: false
-      command: >
-        kubectl create secret generic regcred 
-        --from-file=.dockerconfigjson=/home/{{ kube_user }}/.docker/config.json 
-        --type=kubernetes.io/dockerconfigjson
-
-      register: regcred_result
-      failed_when: false
 
     - name: Start Minikube
       become: false
@@ -155,6 +148,16 @@
         owner: "{{ kube_user }}"
         group: "{{ kube_user }}"
         mode: '0755'
+
+    - name: Create Kubernetes imagePullSecret for private registry
+      become: false
+      command: >
+        kubectl create secret docker-registry regcred 
+        --docker-server=registry.git.step.polymtl.ca
+        --docker-username="{{ juliette-mathivet }}"
+        --docker-password="{{ STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk }}"
+        --docker-email="juliette.mathivet@etud.polymtl.ca"
+        --dry-run=client -o yaml | kubectl apply -f -
 
     # =========================
     # 7. Apply Kubernetes deployment
