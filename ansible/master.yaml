@@ -70,16 +70,17 @@
     - name: docker login
       become: false
       command: >
-        echo "STEP-1KLZiNWINTzlQdVz9GCVX286MQp1Om92CA.01.0y192xwcu" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
+        echo "STEP-kHq1EYy054WWoEgWTlcEvG86MQp1Om94CA.01.0y1v9dinq" | docker login --username juliette-mathivet --password-stdin registry.git.step.polymtl.ca/log8100/equipe11
+
 
     - name: pull image
       become: false
       command: >
         docker pull registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
 
-    - name: Pull an image
-      community.docker.docker_image_pull:
-        name: registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
+    # - name: Pull an image
+    #   community.docker.docker_image_pull:
+    #     name: registry.git.step.polymtl.ca/log8100/equipe11/tp3:latest
     
     # - name: Pull default Docker image
     #   community.docker.docker_image:
