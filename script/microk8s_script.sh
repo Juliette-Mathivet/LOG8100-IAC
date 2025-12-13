@@ -42,15 +42,13 @@ else
     # sudo apt-get install -y "$PACKAGE_NAME"
 fi
 
-echo "if is done";
-sudo usermod -a -G microk8s ubuntu
-sudo chown -f -R ubuntu ~/.kube
-newgrp microk8s
-echo "grp mgmt done";
+# sudo usermod -a -G microk8s ubuntu
+# sudo chown -f -R ubuntu ~/.kube
+# newgrp microk8s
 
-microk8s enable dns;
-microk8s enable dashboard;
-microk8s enable storage;
+sudo microk8s enable dns;
+sudo microk8s enable dashboard;
+sudo microk8s enable storage;
 
 
 
@@ -62,13 +60,13 @@ cd ../kubernetes;
 #         --docker-password=STEP-EmE3IDFNLh_iPVx5BOM_Sm86MQp1Om95CA.01.0y0h33awk
 #         --docker-email=juliette.mathivet@etud.polymtl.ca
 
-microk8s kubectl create secret generic regcred \
+sudo microk8s kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=/home/ubuntu/.docker/config.json \
     --type=kubernetes.io/dockerconfigjson;
 
-microk8s kubectl apply -f webgoat-deployment.yaml;
+sudo microk8s kubectl apply -f webgoat-deployment.yaml;
 
-microk8s kubectl expose deployment webgoat-deployment --type=NodePort --name=webgoat --port=8080;
-microk8s kubectl port-forward service/webgoat 8080:80;
+sudo microk8s kubectl expose deployment webgoat-deployment --type=NodePort --name=webgoat --port=8080;
+sudo microk8s kubectl port-forward service/webgoat 8080:80;
 
 
