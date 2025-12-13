@@ -49,6 +49,7 @@ fi
 sudo microk8s enable dns;
 sudo microk8s enable dashboard;
 sudo microk8s enable storage;
+sudo microk8s enable ingress;
 
 
 
@@ -65,8 +66,8 @@ sudo microk8s kubectl create secret generic regcred \
     --type=kubernetes.io/dockerconfigjson;
 
 sudo microk8s kubectl apply -f webgoat-deployment.yaml;
-
-sudo microk8s kubectl expose deployment webgoat-deployment --name=webgoat --type=LoadBalancer --port=80 --target-port=8080;
-sudo microk8s kubectl port-forward service/webgoat 80:8080;
+sudo microk8s kubectl apply -f webgoat-service.yaml;
+sudo microk8s kubectl apply -f default-ingress.yaml;
+sudo microk8s kubectl apply -f webgoat-ingress.yaml;
 
 
