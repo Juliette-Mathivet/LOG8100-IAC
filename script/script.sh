@@ -45,7 +45,7 @@ cd LOG8100-IAC/kubernetes
 #         --docker-email=juliette.mathivet@etud.polymtl.ca
 
 kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=~/.docker/config.json \
+    --from-file=.dockerconfigjson=/home/ubuntu/.docker/config.json \
     --type=kubernetes.io/dockerconfigjson
 
 kubectl apply -f webgoat-deployment.yaml 
